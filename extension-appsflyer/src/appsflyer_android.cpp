@@ -76,6 +76,11 @@ void StartSDK()
     env->CallVoidMethod(g_appsflyer.m_AppsflyerJNI, g_appsflyer.m_StartSDK);
 }
 
+void PromptATT()
+{
+    // not supported on Android platform, fail silently
+}
+
 int GetAppsFlyerUID(lua_State* L)
 {
     dmAndroid::ThreadAttacher threadAttacher;

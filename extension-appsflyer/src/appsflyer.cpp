@@ -26,6 +26,13 @@ static int Lua_StartSDK(lua_State* L)
     return 0;
 }
 
+static int Lua_PromptATT(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 0);
+    PromptATT();
+    return 0;
+}
+
 static int Lua_GetAppsFlyerUID(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 1);
@@ -113,6 +120,7 @@ static int Lua_SetCustomerUserId(lua_State* L)
 static const luaL_reg Module_methods[] =
 {
     {"start_sdk", Lua_StartSDK},
+    {"prompt_att", Lua_PromptATT},
     {"set_callback", Lua_SetCallback},
     {"set_debug_log", Lua_SetDebugLog},
     {"set_anonymize", Lua_SetAnonymize},

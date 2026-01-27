@@ -9,6 +9,8 @@
 #import "DEFAFSDKDelegate.h"
 #import "AppsFlyerAttribution.h"
 #import "AppsflyerAppDelegate.h"
+#import <AppTrackingTransparency/AppTrackingTransparency.h>
+
 
 namespace dmAppsflyer {
 
@@ -39,7 +41,7 @@ void Finalize_Ext(){
 
 
 void InitializeSDK(const char* key, const char* appleAppID){
-              NSLog(@"AppsFlyer InitializeSDK");
+  NSLog(@"AppsFlyer InitializeSDK");
   [AppsFlyerLib shared].isDebug = true;
   DEFAFSDKDelegate *delegate = [[DEFAFSDKDelegate alloc] init];
   [AppsFlyerAttribution shared].isBridgeReady = YES;
@@ -52,7 +54,23 @@ void InitializeSDK(const char* key, const char* appleAppID){
 }
 
 void StartSDK(){
+  NSLog(@"AppsFlyer StartSDK");
+  // TODO: Wait for small # seconds, for users with existing accounts? but we want to catch install events for ppl who drop off at registration.
+  // if (@available(iOS 14, *)) {
+  //     [[AppsFlyerLib shared] waitForATTUserAuthorizationWithTimeoutInterval:60];
+  // }
   [[AppsFlyerLib shared] start];
+}
+
+void PromptATT(){
+  NSLog(@"AppsFlyer PromptATT");
+  if (@available(iOS 14, *)) {
+    [ATTrackingManager requestTrackingAuthorizationWithCompletionHandler:^(ATTrackingManagerAuthorizationStatus status) {
+      NSLog(@"AppsFlyer requestTrackingAuthorizationWithCompletionHandler Status: %lu", (unsigned long)status);
+      // "Restart" SDK to ensure it rechecks ATT status (is this needed? shrug)
+      [[AppsFlyerLib shared] start];
+    }];
+  }
 }
 
 void SetDebugLog(bool is_debug){
