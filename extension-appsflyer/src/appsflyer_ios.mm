@@ -59,6 +59,11 @@ void SetDebugLog(bool is_debug){
   [AppsFlyerLib shared].isDebug = is_debug;
 }
 
+void SetAnonymize(bool should_anonymize){
+  NSLog(@"AppsFlyer SetAnonymize");
+  // TODO
+}
+
 void LogEvent(const char* eventName, dmArray<TrackData>* trackData){
   @autoreleasepool {
     NSMutableDictionary* newDict = [NSMutableDictionary dictionary];
