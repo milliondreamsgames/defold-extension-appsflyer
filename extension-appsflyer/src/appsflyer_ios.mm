@@ -55,10 +55,10 @@ void InitializeSDK(const char* key, const char* appleAppID){
 
 void StartSDK(){
   NSLog(@"AppsFlyer StartSDK");
-  // TODO: Wait for small # seconds, for users with existing accounts? but we want to catch install events for ppl who drop off at registration.
-  // if (@available(iOS 14, *)) {
-  //     [[AppsFlyerLib shared] waitForATTUserAuthorizationWithTimeoutInterval:60];
-  // }
+  // Wait for small # seconds, for users to acknowledge PromptAtt for a non-anonymous install event
+  if (@available(iOS 14, *)) {
+      [[AppsFlyerLib shared] waitForATTUserAuthorizationWithTimeoutInterval:20];
+  }
   [[AppsFlyerLib shared] start];
 }
 
@@ -78,8 +78,7 @@ void SetDebugLog(bool is_debug){
 }
 
 void SetAnonymize(bool should_anonymize){
-  NSLog(@"AppsFlyer SetAnonymize");
-  // TODO
+  [AppsFlyerLib shared].anonymizeUser = should_anonymize;
 }
 
 void LogEvent(const char* eventName, dmArray<TrackData>* trackData){
