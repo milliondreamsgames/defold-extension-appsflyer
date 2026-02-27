@@ -56,6 +56,7 @@ void InitializeSDK(const char* key, const char* appleAppID){
 void StartSDK(){
   NSLog(@"AppsFlyer StartSDK");
   // Wait for small # seconds, for users to acknowledge PromptAtt for a non-anonymous install event
+  // TODO: Make this a parameter
   if (@available(iOS 14, *)) {
       [[AppsFlyerLib shared] waitForATTUserAuthorizationWithTimeoutInterval:20];
   }
@@ -67,7 +68,8 @@ void PromptATT(){
   if (@available(iOS 14, *)) {
     [ATTrackingManager requestTrackingAuthorizationWithCompletionHandler:^(ATTrackingManagerAuthorizationStatus status) {
       NSLog(@"AppsFlyer requestTrackingAuthorizationWithCompletionHandler Status: %lu", (unsigned long)status);
-      // "Restart" SDK to ensure it rechecks ATT status (is this needed? shrug)
+      // "Restart" SDK to ensure it rechecks ATT status
+      // TODO: is this needed? (shrug)
       [[AppsFlyerLib shared] start];
     }];
   }
