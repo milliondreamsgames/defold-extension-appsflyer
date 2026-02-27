@@ -9,6 +9,8 @@
 #import "DEFAFSDKDelegate.h"
 #import "AppsFlyerAttribution.h"
 #import "AppsflyerAppDelegate.h"
+#import <AppTrackingTransparency/AppTrackingTransparency.h>
+
 
 namespace dmAppsflyer {
 
@@ -39,7 +41,7 @@ void Finalize_Ext(){
 
 
 void InitializeSDK(const char* key, const char* appleAppID){
-              NSLog(@"AppsFlyer InitializeSDK");
+  NSLog(@"AppsFlyer InitializeSDK");
   [AppsFlyerLib shared].isDebug = true;
   DEFAFSDKDelegate *delegate = [[DEFAFSDKDelegate alloc] init];
   [AppsFlyerAttribution shared].isBridgeReady = YES;
@@ -52,11 +54,33 @@ void InitializeSDK(const char* key, const char* appleAppID){
 }
 
 void StartSDK(){
+  NSLog(@"AppsFlyer StartSDK");
+  // Wait for small # seconds, for users to acknowledge PromptAtt for a non-anonymous install event
+  // TODO: Make this a parameter
+  if (@available(iOS 14, *)) {
+      [[AppsFlyerLib shared] waitForATTUserAuthorizationWithTimeoutInterval:20];
+  }
   [[AppsFlyerLib shared] start];
+}
+
+void PromptATT(){
+  NSLog(@"AppsFlyer PromptATT");
+  if (@available(iOS 14, *)) {
+    [ATTrackingManager requestTrackingAuthorizationWithCompletionHandler:^(ATTrackingManagerAuthorizationStatus status) {
+      NSLog(@"AppsFlyer requestTrackingAuthorizationWithCompletionHandler Status: %lu", (unsigned long)status);
+      // "Restart" SDK to ensure it rechecks ATT status
+      // TODO: is this needed? (shrug)
+      [[AppsFlyerLib shared] start];
+    }];
+  }
 }
 
 void SetDebugLog(bool is_debug){
   [AppsFlyerLib shared].isDebug = is_debug;
+}
+
+void SetAnonymize(bool should_anonymize){
+  [AppsFlyerLib shared].anonymizeUser = should_anonymize;
 }
 
 void LogEvent(const char* eventName, dmArray<TrackData>* trackData){

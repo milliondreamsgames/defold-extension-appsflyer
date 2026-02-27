@@ -81,6 +81,11 @@ public class AppsflyerJNI {
         AppsFlyerLib.getInstance().setDebugLog(is_enable);
     }
 
+    public void setAnonymize(boolean should_anonymize) {
+        Log.d(TAG, "Set anonymize: " + String.valueOf(should_anonymize));
+        AppsFlyerLib.getInstance().anonymizeUser(should_anonymize);
+    }
+
     public void logEvent(String eventName, Map<String, Object> eventValue) {
         Log.d(TAG, "Log event: " + eventName);
         AppsFlyerLib.getInstance().logEvent(activity, eventName, eventValue);

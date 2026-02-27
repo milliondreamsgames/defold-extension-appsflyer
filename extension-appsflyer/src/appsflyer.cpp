@@ -26,6 +26,13 @@ static int Lua_StartSDK(lua_State* L)
     return 0;
 }
 
+static int Lua_PromptATT(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 0);
+    PromptATT();
+    return 0;
+}
+
 static int Lua_GetAppsFlyerUID(lua_State* L)
 {
     DM_LUA_STACK_CHECK(L, 1);
@@ -45,6 +52,14 @@ static int Lua_SetDebugLog(lua_State* L)
     DM_LUA_STACK_CHECK(L, 0);
     bool is_enable = luaL_checkbool(L, 1);
     SetDebugLog(is_enable);
+    return 0;
+}
+
+static int Lua_SetAnonymize(lua_State* L)
+{
+    DM_LUA_STACK_CHECK(L, 0);
+    bool should_anonymize = luaL_checkbool(L, 1);
+    SetAnonymize(should_anonymize);
     return 0;
 }
 
@@ -105,8 +120,10 @@ static int Lua_SetCustomerUserId(lua_State* L)
 static const luaL_reg Module_methods[] =
 {
     {"start_sdk", Lua_StartSDK},
+    {"prompt_att", Lua_PromptATT},
     {"set_callback", Lua_SetCallback},
     {"set_debug_log", Lua_SetDebugLog},
+    {"set_anonymize", Lua_SetAnonymize},
     {"log_event", Lua_LogEvent},
     {"set_customer_user_id", Lua_SetCustomerUserId},
     {"get_appsflyer_uid", Lua_GetAppsFlyerUID},

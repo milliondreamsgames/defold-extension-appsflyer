@@ -21,6 +21,7 @@ struct Appsflyer
     jmethodID       m_InitializeSDK;
     jmethodID       m_StartSDK;
     jmethodID       m_SetDebugLog;
+    jmethodID       m_SetAnonymize;
     jmethodID       m_LogEvent;
     jmethodID       m_SetCustomerUserId;
     jmethodID       m_GetAppsFlyerUID;
@@ -43,6 +44,7 @@ static void InitJNIMethods(JNIEnv* env, jclass cls)
     g_appsflyer.m_InitializeSDK = env->GetMethodID(cls, "initializeSDK", "(Ljava/lang/String;)V");
     g_appsflyer.m_StartSDK = env->GetMethodID(cls, "startSDK", "()V");
     g_appsflyer.m_SetDebugLog = env->GetMethodID(cls, "setDebugLog", "(Z)V");
+    g_appsflyer.m_SetAnonymize = env->GetMethodID(cls, "setAnonymize", "(Z)V");
     g_appsflyer.m_LogEvent = env->GetMethodID(cls, "logEvent", "(Ljava/lang/String;Ljava/util/Map;)V");
     g_appsflyer.m_SetCustomerUserId = env->GetMethodID(cls, "setCustomerUserId", "(Ljava/lang/String;)V");
     g_appsflyer.m_GetAppsFlyerUID = env->GetMethodID(cls, "getAppsFlyerUID", "()Ljava/lang/String;");
@@ -74,6 +76,11 @@ void StartSDK()
     env->CallVoidMethod(g_appsflyer.m_AppsflyerJNI, g_appsflyer.m_StartSDK);
 }
 
+void PromptATT()
+{
+    // not supported on Android platform, fail silently
+}
+
 int GetAppsFlyerUID(lua_State* L)
 {
     dmAndroid::ThreadAttacher threadAttacher;
@@ -89,6 +96,13 @@ void SetDebugLog(bool is_debug)
     dmAndroid::ThreadAttacher threadAttacher;
     JNIEnv* env = threadAttacher.GetEnv();
     env->CallVoidMethod(g_appsflyer.m_AppsflyerJNI, g_appsflyer.m_SetDebugLog, is_debug);
+}
+
+void SetAnonymize(bool should_anonymize)
+{
+    dmAndroid::ThreadAttacher threadAttacher;
+    JNIEnv *env = threadAttacher.GetEnv();
+    env->CallVoidMethod(g_appsflyer.m_AppsflyerJNI, g_appsflyer.m_SetAnonymize, should_anonymize);
 }
 
 void LogEvent(const char* eventName, dmArray<TrackData>* trackData)
