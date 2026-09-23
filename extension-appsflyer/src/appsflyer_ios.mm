@@ -59,9 +59,26 @@ static void StartIfReady()
 {
     if (g_sdkDelegate && g_startRequested && g_sessionReady && ![AppsFlyerLib shared].isStopped && [[AppsFlyerLib shared] isSessionReady]) {
         g_sessionReady = false;
+
+        // (CUSTOM GALAXY CODE)
+        if (@available(iOS 14, *)) {
+            [[AppsFlyerLib shared] waitForATTUserAuthorizationWithTimeoutInterval:20];
+        }
+        // (END CUSTOM GALAXY CODE)
+
         [[AppsFlyerLib shared] startWithCompletionHandler:^(NSDictionary* response, NSError* error) {
             ReportRequest(nil, error);
         }];
+        
+        // (CUSTOM GALAXY CODE)
+        if (@available(iOS 14, *)) {
+            [ATTrackingManager requestTrackingAuthorizationWithCompletionHandler:^(ATTrackingManagerAuthorizationStatus status) {
+            // "Restart" SDK to ensure it rechecks ATT status
+            // TODO: is this needed? (shrug)
+            // [[AppsFlyerLib shared] start];
+            }];
+        }
+        // (END CUSTOM GALAXY CODE)
     }
 }
 

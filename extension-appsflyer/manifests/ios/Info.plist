@@ -2,7 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSAdvertisingAttributionReportEndpoint</key>
+    <key>NSAdvertisingAttributionReportEndpoint</key>
+    <string>https://appsflyer-skadnetwork.com/</string>
+	<key>AdAttributionKit</key>
 	<string>https://appsflyer-skadnetwork.com/</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>Please allow access to non-sensitive tracking data to measure the performance of our services and marketing.</string>
 </dict>
 </plist>
