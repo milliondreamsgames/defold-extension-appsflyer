@@ -7,6 +7,7 @@
 #import "DEFAFSDKDelegate.h"
 #import "AppsFlyerAttribution.h"
 #import "AppsflyerAppDelegate.h"
+#import <AppTrackingTransparency/AppTrackingTransparency.h>
 
 namespace dmAppsflyer {
 
